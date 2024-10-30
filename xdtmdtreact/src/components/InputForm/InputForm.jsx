@@ -1,10 +1,11 @@
 import React, { useState } from 'react'; 
 import { Input as AntdInput } from 'antd';
 import styled from 'styled-components';
+import { WrapperInputStyle } from './style';
 
 // Styled component cho Input
 const StyledInput = styled(AntdInput)`
-  border: 2px solid #87e8de; // Viền màu xanh
+  border: 1px solid #ddd; // Viền màu xanh
   border-radius: 5px; // Bo góc cho Input
 `;
 
@@ -16,7 +17,7 @@ const InputForm = ({ placeholder = 'Nhập text', style }) => {
   };
 
   return (
-    <StyledInput 
+    <WrapperInputStyle 
       placeholder={placeholder} 
       value={valueInput}  
       onChange={handleChange}  
