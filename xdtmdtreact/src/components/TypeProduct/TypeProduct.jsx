@@ -4,7 +4,7 @@ import CardComponent from '../CardComponent/CardComponent';
 import { Col, Row } from 'antd';
 const TypeProduct = ({name}) => {
   return (
-    <div>
+    <div style={{padding:'0 10px'}}>
       {name}
     </div>
   );

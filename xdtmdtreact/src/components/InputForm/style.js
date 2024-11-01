@@ -6,3 +6,7 @@ export const WrapperInputStyle = styled(AntdInput)` // Sử dụng AntdInput
     border-right: none;
     border-left: none; 
 `;
+export const StyledInput = styled(AntdInput)`
+  border: 1px solid #ddd; // Viền màu xanh
+  border-radius: 5px; // Bo góc cho Input
+`;

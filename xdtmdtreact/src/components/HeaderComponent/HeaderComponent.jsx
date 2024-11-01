@@ -2,6 +2,7 @@ import React from 'react';
 import { Badge, Col } from 'antd';
 import { WrapperHeader, WrapperTextHeader, WrapperHeaderAccount, WrapperTextHeaderSmall } from './style.js';
 import Search from 'antd/lib/transfer/search';
+import {useNavigate} from 'react-router-dom';
 import {
     UserOutlined,
     CaretDownOutlined,
@@ -9,16 +10,19 @@ import {
 } from '@ant-design/icons';
 import ButtonInputSearch from '../ButtonInputSearch/ButtonInputSearch';
 const HeaderComponent = () => {
+    const navigate = useNavigate();
+    const handleNavigateLogin = () => {
+        navigate('/sign-in')
+    }
   return (
-    <div>
+    <div style={{width: '100%', background: 'rgb(26,248,255)',justifyContent: 'center'}}>
         <WrapperHeader gutter={16}>
-            <Col span={6} style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <Col span={5} style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
                 <WrapperTextHeader>NHOM 3</WrapperTextHeader>
             </Col>
-            <Col span={12}>
+            <Col span={13}>
                 <ButtonInputSearch
                 size="large"
-                bordered={false}
                 textButton="Tìm Kiếm"
                 placeholder="input search text" />
             </Col>
@@ -26,7 +30,7 @@ const HeaderComponent = () => {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <WrapperHeaderAccount>
                         <UserOutlined style={{ fontSize: '30px' }} />
-                        <div>
+                        <div onClick={handleNavigateLogin} style={{cursor:'pointer'}}>
                             <WrapperTextHeaderSmall>Đăng nhập/Đăng ký</WrapperTextHeaderSmall>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <WrapperTextHeaderSmall>Tài khoản</WrapperTextHeaderSmall>
