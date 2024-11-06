@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React,{ useEffect, useState } from 'react'
 import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from '../SignInPage/style'
 import InputForm from '../../components/InputForm/InputForm'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
@@ -8,6 +8,7 @@ import { Divider, Image } from 'antd'; // thêm dòng này
 import {useNavigate} from 'react-router-dom';
 import * as UserService from '../../service/UserService';
 import { useMutationHooks } from '../../hooks/useMutationHook'
+import * as message from '../../components/Message/Message'
 
 const SignUpPage = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -20,7 +21,18 @@ const SignUpPage = () => {
   const mutation = useMutationHooks(
     data => UserService.signupUser(data)
   );
-  const {data,isLoading} = mutation;
+  const {data,isLoading, isSuccess, isError,error } = mutation;
+
+
+  useEffect(() => {
+    if(isSuccess) {
+      message.success();
+      handleNavigateSignIn();
+    }
+    else if(isError) {
+      message.error(error?.message || "Đăng ký không thành công");
+    }
+  }, [isSuccess, isError]);
 
   const handleOnChangeEmail = (value) => {
     setEmail(value);
@@ -34,6 +46,7 @@ const SignUpPage = () => {
 
   const handleSignUp = () => {
     mutation.mutate({email,password,confirmPassword})
+    console.log(data)
     
   }
 
@@ -80,7 +93,7 @@ const SignUpPage = () => {
               onChange = {handleOnChangeConfirmPassword}
           />
       </div>
-      {data?.status === 'error' && <span style={{color: 'red'}}>{data?.message}</span>}
+      {data?.status === 500 && <span style={{color: 'red'}}>{data?.message}</span>}
         <ButtonComponent
             disabled = {!email.length || !password.length || !confirmPassword.length}
             onClick = {handleSignUp}
