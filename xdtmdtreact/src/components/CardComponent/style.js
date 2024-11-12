@@ -9,10 +9,10 @@ export const StyleNameProduct = styled.div`
 `;
 
 export const WrapperReportText = styled.div`
-    font-size: 10px;
-    color: rgb(128, 128, 137);
-    display: flex; 
-    justify-content: center; 
+    // font-size: 10px;
+    // color: rgb(128, 128, 137);
+    // display: flex; 
+    // justify-content: center; 
 `;
 
 export const WrapperPriceText = styled.div`

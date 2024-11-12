@@ -23,32 +23,32 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const mutation = useMutationHooks(
     data => UserService.loginUser(data)
+    
   );
-  const {data, isLoading ,isSuccess, isError} = mutation;
+  const {data, isLoading ,isSuccess, isError, error} = mutation;
+  
   
   useEffect(() => {
-    if(isSuccess) {
-      navigate('/')
-      localStorage.setItem('access_token', data?.access_token)
+    if(isError) {
+      message.error(error?.message || "Đăng nhập không thành công");
+    }
+    else if(isSuccess) {
+      localStorage.setItem('access_token', JSON.stringify(data?.access_token))
       if(data?.access_token) {
         const decoded = jwtDecode(data?.access_token);
-        console.log(decoded);
         
         if(decoded?.id) {
           handleGetDetailsUser(decoded?.id,data?.access_token )
         } 
-        
       }
-    }
-    else if(isError) {
-      message.error();
+      navigate('/')
     }
   }, [isSuccess, isError]);
 
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id,token);
     dispatch(updateUser({...res?.data, access_token: token}));
-    console.log("res",res);
+    // console.log("res",res);
     
   }
 

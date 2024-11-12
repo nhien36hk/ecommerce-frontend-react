@@ -7,6 +7,8 @@ import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import TypeProduct from "../components/TypeProduct/TypeProduct";
 import TypeProductsPage from "../pages/TypeProductsPage/TypeProductsPage";
 import ProductDetailPage from "../pages/ProductDetailsPage/ProductDetailsPage";
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
+import AdminPage from '../pages/AdminPage/AdminPage';
 export const routes = [
     {
         path: '/',
@@ -63,55 +65,19 @@ export const routes = [
         page: ProductDetailPage,
         isShowHeader: true
     },
-    // {
-    //     path: '/profile-user',
-    //     page: ProfilePage,
-    //     isShowHeader: true
-    // },
-    // {
-    //     path: '/system/admin',
-    //     page: AdminPage,
-    //     isShowHeader: false,
-    //     isPrivated: true
-    // },
+    {
+        path: '/profile-user',
+        page: ProfilePage,
+        isShowHeader: true
+    },
+    {
+        path: '/system/admin',
+        page: AdminPage,
+        isShowHeader: false,
+        isPrivated: true
+    },
     {
         path: '*',
         page: NotFoundPage
     }
 ]
-
-//       path: '/',
-//       element: <HomePage />,
-//     },
-//     {
-//       path: '/order',
-//       element: <OrderPage />,
-//     },
-//     {
-//       path: '/products',
-//       element: <ProductsPage />,
-//     },
-//     {
-//       path: '/sign-in',
-//       element: <SignInPage />,
-//       isShowHeader: false
-  
-//     },
-//     {
-//       path: '/sign-up',
-//       element: <SignUpPage />,
-//       isShowHeader: false
-//     },
-//     {
-//       path: '/product-details',
-//       element: <ProductDetailsPage />,
-//     },
-//     {
-//       path: '/:type',
-//       element: <TypeProductsPage />,
-//     },
-//     {
-//       path: '*',
-//       element: <NotFoundPage />,
-//     },
-//   ];
