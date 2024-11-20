@@ -44,6 +44,7 @@ const HeaderComponent = ({isHiddenSearch = false, isHiddenCart = false}) => {
     const content = (
         <div>
             <WrapperContentPopup onClick = {() => navigate('/profile-user')}>Thông tin cá nhân</WrapperContentPopup>
+            <WrapperContentPopup onClick = {() => navigate('/my-order')}>Lịch sử đơn hàng</WrapperContentPopup>
             {user?.isAdmin &&(
                 <WrapperContentPopup onClick = {() => navigate('/system/admin')}>Quản lí hệ thống</WrapperContentPopup>
             )}

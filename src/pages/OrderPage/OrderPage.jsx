@@ -15,8 +15,7 @@ import { Modal } from 'antd';
 import { message } from 'antd';
 import * as UserService from '../../service/UserService.js';
 import { useNavigate } from 'react-router-dom';
-import Step from '../../components/StepComponent/StepComponent.js';
-import StepComponent from '../../components/StepComponent/StepComponent.js';
+import StepComponent from '../../components/Step/StepComponent.js';
 
 
 
@@ -96,10 +95,10 @@ const OrderPage = () => {
       delivery = 0;
     } else if (priceMemo > 100000 && priceMemo <= 500000) {
       deliveryPrice = 10000;
-      delivery = 1;
+      delivery = 2;
     } else if (priceMemo <= 100000) {
       deliveryPrice = 20000;
-      delivery = 2;
+      delivery = 1;
     } else if (priceMemo > 500000) {
       deliveryPrice = 0;
       delivery = 3;
@@ -189,7 +188,16 @@ const OrderPage = () => {
     }
   };
 
-
+  const handleChangeAddress = () => {
+    console.log('User info:', user); // Xác minh dữ liệu người dùng
+    if (!order?.orderItemsSelected?.length) {
+      message.error('Vui lòng chọn sản phẩm!')
+    } else {
+      if (!user.phone || !user.address || !user.name || user.city) {
+        setIsOpenModalUpdateInfo(true);
+      }
+    }
+  }
 
 
 
@@ -316,8 +324,8 @@ const OrderPage = () => {
               <WrapperInfo>
                 <div>
                   <span>Địa chỉ: </span>
-                  <span style={{ fontWeight: 'bold' }}>Địa chỉ của người dùng</span>
-                  <span style={{ color: '#9255FD', cursor: 'pointer' }}>Thay đổi</span>
+                  <span style={{ fontWeight: 'bold' }}>{`${user?.address} ${user?.city}`}</span>
+                  <span onClick={handleChangeAddress} style={{ color: '#9255FD', cursor: 'pointer' }}>Thay đổi</span>
                 </div>
               </WrapperInfo>
               <WrapperInfo>
