@@ -21,6 +21,7 @@ import {
   PaymentButton,
 } from './style';
 import { useLocation, useNavigate } from 'react-router-dom';
+import * as PaymentService from '../../service/PaymentService';
 
 
 
@@ -64,7 +65,7 @@ const OrderPage = () => {
     },
   )
 
-  const {data: dataAdd, isLoading: isLoadingAddOrder, isSuccess, isError } = mutationAddOrder;
+  const { data: dataAdd, isLoading: isLoadingAddOrder, isSuccess, isError } = mutationAddOrder;
 
 
   const handleDeliveryChange = (e) => {
@@ -138,23 +139,62 @@ const OrderPage = () => {
     }
   };
 
-  console.log('orderItemsSelected:', orderItemsSelected);
+  console.log('orderItemsSelected:', user.name);
 
-  const handleAddOrder = () => {
+  const handleAddOrder = async () => {
     if (user?.access_token && orderItemsSelected && user?.name && user?.address && user?.phone && user?.city && priceMemo && user?.id) {
-      mutationAddOrder.mutate({ token: user?.access_token, orderItems: orderItemsSelected, fullName: user?.name, address: user?.address, phone: user?.phone, city: user?.city, paymentMethod: payment, itemsPrice: priceMemo, shippingPrice: priceDeliveryMemo, totalPrice: totalPriceMemo, user: user?.id }, {
-        onSuccess: () => {
-          const arrayOrdered = [];
-          orderItemsSelected.forEach(element => {
-            arrayOrdered.push(element.product)
+      if (payment === 'vnpay') {
+        try {
+          const res = await PaymentService.createPayment({
+            orderItems: orderItemsSelected,
+            fullName: user?.name,
+            address: user?.address,
+            phone: user?.phone,
+            city: user?.city,
+            paymentMethod: payment,
+            itemsPrice: priceMemo,
+            shippingPrice: priceDeliveryMemo,
+            totalPrice: totalPriceMemo,
+            user: user?.id
           });
-          dispatch(removeAllOrderProduct({listChecked: arrayOrdered}))
-          message.success("Đặt hàng thành công!")
-          navigate('/ordersuccess', {
-            state: { deliveryMethod, payment, orderItemsSelected, totalPriceMemo}, // Sao chép dữ liệu
-          });
+
+          if (res?.data?.url) {
+            window.location.href = res.data.url; // Redirect to the payment URL
+          } else {
+            message.error('Không có URL để chuyển hướng'); // Handle the case where URL is not present
+          }
+
+        } catch (error) {
+          console.error('Payment error:', error);
+          message.error('Có lỗi xảy ra khi thanh toán qua VNPAY');
         }
-      })
+      } else {
+        mutationAddOrder.mutate({
+          token: user?.access_token,
+          orderItems: orderItemsSelected,
+          fullName: user?.name,
+          address: user?.address,
+          phone: user?.phone,
+          city: user?.city,
+          paymentMethod: payment,
+          itemsPrice: priceMemo,
+          shippingPrice: priceDeliveryMemo,
+          totalPrice: totalPriceMemo,
+          user: user?.id
+        }, {
+          onSuccess: () => {
+            const arrayOrdered = [];
+            orderItemsSelected.forEach(element => {
+              arrayOrdered.push(element.product)
+            });
+            dispatch(removeAllOrderProduct({ listChecked: arrayOrdered }))
+            message.success("Đặt hàng thành công!")
+            navigate('/ordersuccess', {
+              state: { deliveryMethod, payment, orderItemsSelected, totalPriceMemo }, // Sao chép dữ liệu
+            });
+          }
+        });
+      }
     }
   };
 
@@ -214,6 +254,9 @@ const OrderPage = () => {
     })
   }
 
+  const [isLoading, setIsLoading] = useState(false);
+
+
   return (
     <div style={{ background: '#f5f5fa', width: '100%', height: '100vh' }}>
       <Loading isLoading={isLoadingAddOrder}>
@@ -257,6 +300,16 @@ const OrderPage = () => {
                       onChange={handlePaymentChange}
                     />
                     Thanh toán tiền mặt khi nhận hàng
+                  </PaymentOption>
+                  <PaymentOption>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="vnpay"
+                      checked={payment === 'vnpay'}
+                      onChange={handlePaymentChange}
+                    />
+                    Thanh toán qua VNPAY
                   </PaymentOption>
                 </PaymentOptions>
               </WrapperPaymentSection>
