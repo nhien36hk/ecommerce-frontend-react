@@ -23,3 +23,12 @@ export const getOderDetails = async (id, access_token) => {
     return res.data
 }
 
+export const getMyOrders = async (userId, accessToken) => {
+    const res = await axiosJWT.get(`${process.env.REACT_APP_API_URL_BACKEND}/order/get-my-orders/${userId}`, {
+        headers: {
+            token: `Bearer ${accessToken}`
+        }
+    });
+    return res.data; // Trả về danh sách đơn hàng
+};
+
